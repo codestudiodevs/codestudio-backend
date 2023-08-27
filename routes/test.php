@@ -27,6 +27,16 @@ Route::get('/syncLogsScript', function (Request $request) {
 });
 
 Route::get('/test', function (Request $request) {
+
+    try {
+        // Check database connection
+        DB::connection()->getPdo();
+    } catch (\Exception $e) {
+        throw ValidationException::withMessages([
+            'email' => ['Database is down'],
+        ]);
+    }
+
     return defaultCards();
 
     Logger::channel('custom')->info('This is a custom log message.');
